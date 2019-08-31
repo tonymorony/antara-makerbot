@@ -19,6 +19,18 @@ if (NOT EXISTS ${PROJECT_SOURCE_DIR}/src/version/version.hpp)
     configure_file(${CMAKE_MODULE_PATH}/version.hpp.in  ${PROJECT_SOURCE_DIR}/src/version/version.hpp @ONLY)
 endif()
 
+#option(CURL_STATICLIB "Set to ON to build libcurl with static linking."  ON)
+if(WIN32)
+    add_definitions("-DCURL_STATICLIB")
+endif()
+set(CURL_LIBRARY "-lcurl") 
+find_package(CURL REQUIRED) 
+include_directories(${CURL_INCLUDE_DIR})
+
+if(LIBCURL_ENABLE)
+    target_link_libraries(app ${CURL_LIBRARIES})
+endif()
+
 option(USE_ASAN "Use address sanitizer" OFF)
 option(USE_TSAN "Use thread sanitizer" OFF)
 option(USE_UBSAN "Use thread sanitizer" OFF)
